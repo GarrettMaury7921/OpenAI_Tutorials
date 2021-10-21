@@ -1,108 +1,83 @@
-import gym
-import numpy as np
-import random
 import math
+import random
+import time
+from typing import Tuple
+import numpy as np
+from sklearn.preprocessing import KBinsDiscretizer
 
-# Create the environment
-environment = gym.make('CartPole-v0')
-environment.reset()
+# import gym
+import gym
 
-# state_values: Four dimensions of continuous values.
-# Actions : Two discrete values.
-# The dimensions, or space, can be referred to as the state_values space and the action space.
-num_buckets = (1, 1, 6, 3)
-num_actions = not environment.action_space
-
-state_value_bounds = list(zip(environment.observation_space.low, environment.observation_space.high))
-state_value_bounds[1] = [-0.5, -0.5]
-state_value_bounds[3] = [-math.radians(50), math.radians(50)]
-action_index = len(num_buckets)
-
-q_value_table = np.zeros(num_buckets + (num_actions,))
-min_explore_rate = 0.01
-min_learning_rate = 0.1
-
-max_episodes = 1000 # Maximum amount of games played
-max_time_steps = 250
-streak_to_end = 120
-solved_time = 199
-discount = 0.99
-num_streaks = 0
+env = gym.make('CartPole-v1')
 
 
-# Select action
-def select_action(state_value, explore_rate):
-    if random.random() < explore_rate:
-        action = environment.action_space.sample()
-    else:
-        action = np.argmax(q_value_table[state_value])
-    return action
+def policy(state: tuple):
+    """Choosing action based on epsilon-greedy policy"""
+    return np.argmax(Q_table[state])
 
 
-# Select Explore rate
-def select_explore_rate(x):
-    return max(min_explore_rate, min(1, 1.0 - math.log10((x+1)/25)))
+def new_q_value(reward: float, new_state: tuple, discount_factor=1) -> float:
+    """Temporal difference for updating Q-value of state-action pair"""
+    future_optimal_value = np.max(Q_table[new_state])
+    learned_value = reward + discount_factor * future_optimal_value
+    return learned_value
 
 
-# Select Learning Rate
-def select_learning_rate(x):
-    return max(min_learning_rate, min(0.5, 1.0 - math.log10((x+1)/25)))
+def convert_to_discrete(_, __, angle, pole_velocity) -> Tuple[int, ...]:
+    """Convert continuous state intro a discrete state"""
+    est = KBinsDiscretizer(n_bins=n_bins, encode='ordinal', strategy='uniform')
+    est.fit([lower_bounds, upper_bounds])
+    return tuple(map(int, est.transform([[angle, pole_velocity]])[0]))
 
 
-def bucketize_state_value(state_value):
-    bucket_indexes = []
-    for i in range(len(state_value)):
-        if state_value[i] <= state_value_bounds[i][0]:
-            bucket_index = 0
-        elif state_value[i] >= state_value_bounds[i][1]:
-            bucket_index = num_buckets[i] - 1
-        else:
-            bound_width = state_value_bounds[i][1] - state_value_bounds[i][0]
-            offset = (num_buckets[i]-1) * state_value_bounds[i][0] / bound_width
-            scaling = (num_buckets[i]-1) / bound_width
-            bucket_index = int(round(scaling * state_value[i] - offset))
-        return tuple(bucket_indexes)
+# Adaptive learning of Learning Rate
+def learning_rate(n: int, min_rate = 0.01) -> float:
+    """Decaying learning rate"""
+    return max(min_rate, min(1.0, 1.0 - math.log10((n + 1) / 25)))
 
 
-# Train the episodes
-for num_episodes in range(max_episodes):
-    explore_rate = select_explore_rate(num_episodes)
-    learning_rate = select_learning_rate(num_episodes)
+def exploration_rate(n: int, min_rate=0.1) -> float:
+    """Decaying exploration rate"""
+    return max(min_rate, min(1, 1.0 - math.log10((n + 1) / 25)))
 
-    observation = environment.reset()
 
-    start_state_value = bucketize_state_value(observation)
-    previous_state_value = start_state_value
+n_bins = (6, 12)
+lower_bounds = [env.observation_space.low[2], -math.radians(50)]
+upper_bounds = [env.observation_space.high[2], math.radians(50)]
 
-    for time_step in range(max_time_steps):
-        environment.render()
-        selected_action = select_action(previous_state_value, explore_rate)
-        observation, reward_gain, completed, _ = environment.step(selected_action)
-        state_value = bucketize_state_value(observation)
-        best_q_value = np.amax(q_value_table[state_value])
 
-        q_value_table[previous_state_value + (selected_action,)] += learning_rate * (
-                reward_gain + discount * best_q_value - q_value_table[previous_state_value + (selected_action,)])
+# Initialize the Q value table with zeros.
+Q_table = np.zeros(n_bins + (env.action_space.n,))
+Q_table.shape
 
-        print('Episode number : %d' % num_episodes)
-        print('Time step : %d' % time_step)
-        print('Selection action : %d' % selected_action)
-        print('Current state : %s' % str(state_value))
-        print('Reward obtained : %f' % reward_gain)
-        print('Best Q value : %f' % best_q_value)
-        print('Learning rate : %f' % learning_rate)
-        print('Explore rate : %f' % explore_rate)
-        print('Streak number : %d' % num_streaks)
 
-        if completed:
-            print('Episode %d finished after %f time steps' % (num_episodes, time_step))
-            if time_step >= solved_time:
-                num_streaks += 1
-            else:
-                num_streaks = 0
-                break
+# TRAINING
+num_episodes = 1000
+for e in range(num_episodes):
 
-        previous_state_value = state_value
+    # Discrete-ize state into buckets
+    current_state, done = convert_to_discrete(*env.reset()), False
 
-        if num_streaks > streak_to_end:
-            break
+    while not done:
+
+        # policy action
+        action = policy(current_state)
+
+        # insert random action
+        if np.random.random() < exploration_rate(e):
+            action = env.action_space.sample()  # explore
+
+        # increment environment
+        obs, reward, done, _ = env.step(action)
+        new_state = convert_to_discrete(*obs)
+
+        # Update Q-Table
+        lr = learning_rate(e)
+        learnt_value = new_q_value(reward, new_state)
+        old_value = Q_table[current_state][action]
+        Q_table[current_state][action] = (1 - lr) * old_value + lr * learnt_value
+
+        current_state = new_state
+
+        # Render the cartpole environment
+        env.render()
