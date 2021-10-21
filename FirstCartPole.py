@@ -52,9 +52,11 @@ Q_table.shape
 
 
 # TRAINING
-num_episodes = 1000
+num_episodes = 10000
 for e in range(num_episodes):
 
+    # Print out episode
+    print(e)
     # Discrete-ize state into buckets
     current_state, done = convert_to_discrete(*env.reset()), False
 
