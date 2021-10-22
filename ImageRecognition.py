@@ -10,12 +10,14 @@ x = 0
 while 1:
     # MAY CHANGE IF YOU CHANGE COMPUTERS
     # MUST BE SHIFT + (Windows Key) + S FOR SCREENSHOT
-    if pyautogui.locateOnScreen('image_assets/main_menu.png', confidence=.9) is not None:
-        print('I can see it!')
+    if pyautogui.locateOnScreen('image_assets/main_menu.png', confidence=.9) \
+            or pyautogui.locateOnScreen('image_assets/main_menu2.png', confidence=.9) \
+            or pyautogui.locateOnScreen('image_assets/main_menu3.png', confidence=.9) is not None:
+        print('I can see the main menu!')
         time.sleep(0.5)
         break
     else:
         print('I cannot see it...')
         print(x)
-        x = x+1
+        x = x + 1
         time.sleep(0.5)
