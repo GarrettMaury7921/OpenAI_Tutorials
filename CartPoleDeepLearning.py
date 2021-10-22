@@ -35,7 +35,13 @@ def build_agent(model, actions):
 
 dqn = build_agent(model, actions)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
-# dqn.fit(env, nb_steps=50000, visualize=False, verbose=1)
+dqn.fit(env, nb_steps=5000, visualize=True, verbose=1)
 
-scores = dqn.test(env, nb_episodes=100, visualize=False)
+# LOAD AI
+# dqn.load_weights('dqn_weights.h5f')
+
+# SAVE AI
+# dqn.save_weights('dqn_weights.h5f', overwrite=True)
+
+scores = dqn.test(env, nb_episodes=100, visualize=True)
 print(np.mean(scores.history['episode_reward']))
