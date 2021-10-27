@@ -12,5 +12,19 @@ env = DummyVecEnv([lambda: env])
 # USING GPU, importing algorithm PPO
 model = PPO('MlpPolicy', env, verbose=1)
 
+PPO_PATH = os.path.join('Training', 'Saved Models', 'PPO_MODEL_CartPole')
+
+# Delete it from here
+# del model
+
+# Load it from the folder
+model = PPO.load(PPO_PATH, env=env)
+
 # Training
-model.learn(total_timesteps=20000)
+# model.learn(total_timesteps=50000)
+
+# Save the model into a folder
+model.save(PPO_PATH)
+
+# Evaluate our policy
+evaluate_policy(model, env, n_eval_episodes=10, render=True)
