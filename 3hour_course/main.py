@@ -5,21 +5,21 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.callbacks import EvalCallback, StopTrainingOnRewardThreshold
 from stable_baselines3.common.evaluation import evaluate_policy
 
+# VARIABLES
 environment_name = 'CartPole-v0'
 log_path = os.path.join('training', 'Logs')
+PPO_PATH = os.path.join('Training', 'Saved Models', 'PPO_MODEL_CartPole')
 
 env = gym.make(environment_name)
 env = DummyVecEnv([lambda: env])
 # USING GPU, importing algorithm PPO
 model = PPO('MlpPolicy', env, verbose=1)
 
-PPO_PATH = os.path.join('Training', 'Saved Models', 'PPO_MODEL_CartPole')
-
-# Delete it from here
+# Delete the model
 # del model
 
 # Load it from the folder
-model = PPO.load(PPO_PATH, env=env)
+# model = PPO.load(PPO_PATH, env=env)
 
 # Callbacks - Stop training once it reaches 200 average, verbose is for logging
 save_path = os.path.join('Training', 'Saved Models')
@@ -47,7 +47,7 @@ net_arch = [dict(pi=[128, 128, 128, 128], vf=[128, 128, 128, 128])]
 # Evaluate our policy
 evaluate_policy(model, env, n_eval_episodes=100, render=True)
 
-
+# TEST
 # episodes = 5
 # for episode in range(1, episodes+1):
 #     obs = env.reset()
