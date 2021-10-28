@@ -7,6 +7,7 @@ import os
 
 log_path = os.path.join('Training', 'Logs')
 a2c_path = os.path.join('Training', 'Saved Models', 'A2C_model')
+a2c_2m_path = os.path.join('Training', 'Saved Models', 'A2C_2M_model')
 
 # TESTING
 env = make_atari_env('Breakout-v0', n_envs=1, seed=0)
@@ -20,20 +21,22 @@ env = VecFrameStack(env, n_stack=4)
 model = A2C("CnnPolicy", env, verbose=1, tensorboard_log=log_path)
 
 # LEARNING
-# model.learn(total_timesteps=500)
+# model.learn(total_timesteps=400000)
 
 # SAVE MODEL OR DELETE
 # model.save(a2c_path)
-del model
+# del model
 
 # LOAD MODEL
-model = A2C.load(a2c_path, env)
+# model = A2C.load(a2c_path, env)
+# 2 Million Tries Model
+model = A2C.load(a2c_2m_path, env)
 
 # EVALUATE AND TEST
-evaluate_policy(model, env, n_eval_episodes=10, render=True)
-# obs = env.reset()
-# while True:
-#     action, _states = model.predict(obs)
-#     obs, rewards, dones, info = env.step(action)
-#     env.render()
-# env.close()
+# evaluate_policy(model, env, n_eval_episodes=10, render=True)
+obs = env.reset()
+while True:
+    action, _states = model.predict(obs)
+    obs, rewards, dones, info = env.step(action)
+    env.render()
+env.close()
