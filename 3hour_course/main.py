@@ -19,7 +19,7 @@ PPO_PATH = os.path.join('Training', 'Saved Models', 'PPO_MODEL_CartPole')
 # del model
 
 # Load it from the folder
-# model = PPO.load(PPO_PATH, env=env)
+model = PPO.load(PPO_PATH, env=env)
 
 # Callbacks - Stop training once it reaches 200 average, verbose is for logging
 save_path = os.path.join('Training', 'Saved Models')
@@ -36,8 +36,8 @@ eval_callback = EvalCallback(env,
 
 # Changing Policies
 net_arch = [dict(pi=[128, 128, 128, 128], vf=[128, 128, 128, 128])]
-model = PPO('MlpPolicy', env, verbose=1, policy_kwargs={'net_arch': net_arch})
-model.learn(total_timesteps=200, callback=eval_callback)
+# model = PPO('MlpPolicy', env, verbose=1, policy_kwargs={'net_arch': net_arch})
+# model.learn(total_timesteps=200, callback=eval_callback)
 
 # Training
 # model.learn(total_timesteps=50000)
@@ -45,7 +45,7 @@ model.learn(total_timesteps=200, callback=eval_callback)
 # model.learn(total_timesteps=20000, callback=eval_callback)
 
 # Evaluate our policy
-# evaluate_policy(model, env, n_eval_episodes=10, render=True)
+evaluate_policy(model, env, n_eval_episodes=100, render=True)
 
 
 # episodes = 5
