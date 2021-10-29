@@ -19,7 +19,7 @@ model = PPO('MlpPolicy', env, verbose=1)
 # del model
 
 # Load it from the folder
-# model = PPO.load(PPO_PATH, env=env)
+model = PPO.load(PPO_PATH, env=env)
 
 # Callbacks - Stop training once it reaches 200 average, verbose is for logging
 save_path = os.path.join('Training', 'Saved Models')

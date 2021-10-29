@@ -42,7 +42,7 @@ model = A2C.load(a2c_2more_path, env)
 # model.save(a2c_2more_path)
 
 # EVALUATE AND TEST
-evaluate_policy(model, env, n_eval_episodes=10, render=True)
+# evaluate_policy(model, env, n_eval_episodes=5, render=True)
 obs = env.reset()
 while True:
     action, _states = model.predict(obs)
