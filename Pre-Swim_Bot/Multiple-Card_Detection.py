@@ -2,62 +2,82 @@ import cv2 as cv
 import numpy as np
 import os
 
-template = cv.imread('image_assets/cards/template3.png', cv.IMREAD_REDUCED_COLOR_2)
-img = cv.imread('image_assets/cards/rearguard.png', cv.IMREAD_REDUCED_COLOR_2)
-width = img.shape[1]
-height = img.shape[0]
 
-# Note that the values are inverted for TM_SQDIFF and TM_SQDIFF_NORMED
-result = cv.matchTemplate(template, img, cv.TM_SQDIFF_NORMED)
+def find_click_positions(img_path, board_path, threshold=0.5, debug_mode=None):
+    template = cv.imread(board_path, cv.IMREAD_REDUCED_COLOR_2)
+    img = cv.imread(img_path, cv.IMREAD_REDUCED_COLOR_2)
+    # Width and height
+    width = img.shape[1]
+    height = img.shape[0]
 
-# I've inverted the threshold and where comparison to work with TM_SQDIFF_NORMED
-threshold = 0.17
-locations = np.where(result <= threshold)
+    # Note that the values are inverted for TM_SQDIFF and TM_SQDIFF_NORMED
+    result = cv.matchTemplate(template, img, cv.TM_SQDIFF_NORMED)
 
-# We can zip those up into a list of (x, y) position tuples
-locations = list(zip(*locations[::-1]))
-# print(locations)
+    # I've inverted the threshold and where comparison to work with TM_SQDIFF_NORMED
+    threshold = 0.17
+    locations = np.where(result <= threshold)
 
-# GROUP RECTANGLES
-# First we need to create the list of [x, y, w, h] rectangles
-rectangles = []
-for loc in locations:
-    rect = [int(loc[0]), int(loc[1]), width, height]
-    # Add every box to the list twice in order to retain single (non-overlapping) boxes
-    rectangles.append(rect)
+    # We can zip those up into a list of (x, y) position tuples
+    locations = list(zip(*locations[::-1]))
+    # print(locations)
 
-# 3rd param, higher = easier to find cards, lower =
-# harder to find cards but less likely for rectangles to choose the same card
-rectangles, weights = cv.groupRectangles(rectangles, 1, 0.1)
+    # GROUP RECTANGLES
+    # First we need to create the list of [x, y, w, h] rectangles
+    rectangles = []
+    for loc in locations:
+        rect = [int(loc[0]), int(loc[1]), width, height]
+        # Add every box to the list twice in order to retain single (non-overlapping) boxes
+        rectangles.append(rect)
 
-print(rectangles)
+    # 3rd param, higher = easier to find cards, lower =
+    # harder to find cards but less likely for rectangles to choose the same card
+    rectangles, weights = cv.groupRectangles(rectangles, 1, 0.1)
 
-if len(rectangles):
-    print('Found card.')
+    # print(rectangles)  # Print where cards are
 
-    line_color = (0, 255, 0)
-    line_type = cv.LINE_4
+    points = []
+    if len(rectangles):
+        print('Found card.')
 
-    marker_color = (255, 0, 255)
-    marker_type = cv.MARKER_CROSS
+        line_color = (0, 255, 0)
+        line_type = cv.LINE_4
 
-    # Loop over all the locations and draw their rectangle
-    for (x, y, w, h) in rectangles:
-        # Determine the box positions
-        top_left = (x, y)
-        bottom_right = (x + w, y + h)
-        # Draw the box
-        cv.rectangle(template, top_left, bottom_right, line_color, line_type)
+        marker_color = (255, 0, 255)
+        marker_type = cv.MARKER_CROSS
 
-        center_x = x + int(w/2)
-        center_y = y + int(h/2)
-        cv.drawMarker(template, (center_x, center_y),
-                      color=marker_color, markerType=marker_type,
-                      markerSize=40, thickness=2)
+        # Loop over all the locations and draw their rectangle
+        for (x, y, w, h) in rectangles:
+            # Determine the center position
+            center_x = x + int(w / 2)
+            center_y = y + int(h / 2)
+            # Save the points
+            points.append((center_x, center_y))
 
-    cv.imshow('Matches', template)
-    cv.waitKey()
-    # cv.imwrite('result.jpg', haystack_img)
+            if debug_mode == 'rectangles':
+                # Determine the box position
+                top_left = (x, y)
+                bottom_right = (x + w, y + h)
+                # Draw the box
+                cv.rectangle(template, top_left, bottom_right, color=line_color,
+                             lineType=line_type, thickness=2)
+            elif debug_mode == 'points':
+                # Draw the center point
+                cv.drawMarker(template, (center_x, center_y),
+                              color=marker_color, markerType=marker_type,
+                              markerSize=40, thickness=2)
 
-else:
-    print('Needle not found.')
+        if debug_mode:
+            cv.imshow('Matches', template)
+            cv.waitKey()
+            # cv.imwrite('result_click_point.jpg', haystack_img)
+
+    return points
+
+
+points = find_click_positions('image_assets/cards/rearguard.png', 'image_assets/cards/template3.png',
+                              debug_mode='points')
+
+points = find_click_positions('image_assets/cards/rearguard.png', 'image_assets/cards/template3.png',
+                              threshold=0.70, debug_mode='rectangles')
+
+print(points)
