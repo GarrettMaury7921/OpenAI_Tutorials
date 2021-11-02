@@ -3,8 +3,6 @@ import pyautogui
 import time
 import keyboard
 import random
-import win32api
-import win32con
 
 x = 0
 while 1:

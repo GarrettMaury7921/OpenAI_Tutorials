@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Convolution2D
 from tensorflow.keras.optimizers import Adam
@@ -45,11 +46,11 @@ dqn.compile(Adam(lr=1e-4))
 dqn.load_weights('SavedWeights/SpaceInvaders1/dqn_weights.h5f')
 
 # TRAINING
-dqn.fit(env, nb_steps=500, visualize=False, verbose=1)
+# dqn.fit(env, nb_steps=10000, visualize=False, verbose=2)
 
 # TESTING
-# scores = dqn.test(env, nb_episodes=10, visualize=True)
-# print(np.mean(scores.history['episode_reward']))
+scores = dqn.test(env, nb_episodes=10, visualize=True)
+print(np.mean(scores.history['episode_reward']))
 
 # SAVE
-dqn.save_weights('SavedWeights/SpaceInvaders1/dqn_weights.h5f')
+# dqn.save_weights('SavedWeights/SpaceInvaders1/dqn_weights.h5f', overwrite=True)
