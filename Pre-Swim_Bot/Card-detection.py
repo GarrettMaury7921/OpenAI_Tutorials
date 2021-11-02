@@ -23,7 +23,7 @@ print('Best match confidence: %s' % max_val)
 
 threshold = 0.8
 if max_val >= threshold:
-    print('Found pic.')
+    print('Found card.')
 
     wid = img.shape[1]
     hei = img.shape[0]
