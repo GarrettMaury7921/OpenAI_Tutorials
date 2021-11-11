@@ -20,6 +20,7 @@ def read_data(file, L):
 					list = L
 					continue
 				else:
+					text_file.close()
 					loop = False
 
 
@@ -107,10 +108,9 @@ for x in range(4):
 		p_width = min, max, average
 
 print('Summary Statistics:')
-print('			   MIN   MAX  MEAN')
+print('		MIN   MAX  MEAN')
 print('Sepal Length: ' + str(s_length))
 print('Sepal Width: ' + str(s_width))
 print('Petal Length: ' + str(p_length))
 print('Petal Width: ' + str(p_width))
 print('Iris Types: ' + str(distribution))
-
