@@ -1,4 +1,5 @@
 # OpenAI_Tutorials
 Learning Deep Learning &amp; Reinforcement Learning with OpenAI using Python.
-Learning Image Recognition using pyautogui.
-Learning Tensorflow and Keras rl2.
+Learning Image Recognition using pyautogui. Also Learning Tensorflow and Keras rl2.
+
+This also includes other exercises with Python that I may use for Swim_Bot in the future.
