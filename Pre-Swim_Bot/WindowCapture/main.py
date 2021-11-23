@@ -1,5 +1,5 @@
 import cv2 as cv
-from time import time
+from time import time, sleep
 from WindowCapture import WindowCapture
 
 # Get the names of all windows running
@@ -7,7 +7,7 @@ from WindowCapture import WindowCapture
 # exit()
 
 # initialize the WindowCapture class
-Window_Capture = WindowCapture('Task Manager')
+Window_Capture = WindowCapture()
 
 loop_time = time()
 while True:
@@ -15,6 +15,7 @@ while True:
     # get an updated image of the game
     screenshot = Window_Capture.get_screenshot()
 
+    screenshot = cv.resize(screenshot, (600, 400))
     cv.imshow('Computer Vision', screenshot)
 
     # debug the loop rate
