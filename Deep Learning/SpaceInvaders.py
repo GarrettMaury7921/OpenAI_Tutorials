@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
+# LAYERS ERROR, INSTALL TENSORFLOW 2.5
 from tensorflow.keras.layers import Dense, Flatten, Convolution2D
 from tensorflow.keras.optimizers import Adam
 from rl.agents import DQNAgent
@@ -43,7 +44,7 @@ dqn = build_agent(model, actions)
 dqn.compile(Adam(lr=1e-4))
 
 # LOAD MODEL
-dqn.load_weights('SavedWeights/SpaceInvaders1/dqn_weights.h5f')
+# dqn.load_weights('SavedWeights/SpaceInvaders1/dqn_weights.h5f')
 
 # TRAINING
 # dqn.fit(env, nb_steps=10000, visualize=False, verbose=2)
