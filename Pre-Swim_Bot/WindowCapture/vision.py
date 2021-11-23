@@ -36,7 +36,7 @@ def find_click_positions(img_path, template, threshold=0.5, debug_mode=None):
 
     points = []
     if len(rectangles):
-        print('Found card.')
+        # print('Found card.')
 
         line_color = (0, 255, 0)
         line_type = cv.LINE_4

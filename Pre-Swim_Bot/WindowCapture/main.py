@@ -16,8 +16,10 @@ while True:
     # get an updated image of the game
     screenshot = Window_Capture.get_screenshot()
 
-    screenshot = cv.resize(screenshot, (1100, 600))
-    find_click_positions('images/vi.png', screenshot, 0.5, 'rectangles')
+    screenshot = cv.resize(screenshot, (900, 400))
+    # NOTE: If you get a AttributeError: 'NoneType' object has no attribute 'shape'
+    # This means the picture is wrong (location)
+    find_click_positions('images/thumb.png', screenshot, 0.9, 'rectangles')
     # cv.imshow('Computer Vision', screenshot)
 
     # debug the loop rate
