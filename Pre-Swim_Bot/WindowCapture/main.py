@@ -1,6 +1,7 @@
 import cv2 as cv
 from time import time, sleep
 from WindowCapture import WindowCapture
+from vision import findClickPositions
 
 # Get the names of all windows running
 # WindowCapture.list_window_names()
@@ -15,8 +16,9 @@ while True:
     # get an updated image of the game
     screenshot = Window_Capture.get_screenshot()
 
-    screenshot = cv.resize(screenshot, (1100, 600))
-    cv.imshow('Computer Vision', screenshot)
+    # screenshot = cv.resize(screenshot, (1100, 600))
+    findClickPositions('vi.jpg', screenshot, 0.5, 'rectangles')
+    # cv.imshow('Computer Vision', screenshot)
 
     # debug the loop rate
     print('FPS {}'.format(1 / (time() - loop_time)))
