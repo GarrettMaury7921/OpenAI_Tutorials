@@ -1,26 +1,24 @@
 import cv2 as cv
-from time import time, sleep
+import numpy as np
+import os
+from time import time
 from WindowCapture import WindowCapture
-from vision import find_click_positions
-
-# Get the names of all windows running
-# WindowCapture.list_window_names()
-# exit()
+from vision import Vision
 
 # initialize the WindowCapture class
-Window_Capture = WindowCapture()
+wincap = WindowCapture()
+# initialize the Vision class
+vision_limestone = Vision('images/thumb.jpg')
 
 loop_time = time()
 while True:
 
     # get an updated image of the game
-    screenshot = Window_Capture.get_screenshot()
+    screenshot = wincap.get_screenshot()
 
-    screenshot = cv.resize(screenshot, (900, 400))
-    # NOTE: If you get a AttributeError: 'NoneType' object has no attribute 'shape'
-    # This means the picture is wrong (location)
-    find_click_positions('images/thumb.png', screenshot, 0.9, 'rectangles')
-    # cv.imshow('Computer Vision', screenshot)
+    # display the processed image
+    points = vision_limestone.find(screenshot, 0.5, 'rectangles')
+    # points = vision_gunsnbottle.find(screenshot, 0.7, 'points')
 
     # debug the loop rate
     print('FPS {}'.format(1 / (time() - loop_time)))

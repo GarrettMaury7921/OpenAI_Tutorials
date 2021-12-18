@@ -1,6 +1,4 @@
 import numpy as np
-# NOTE GO TO version 300
-# https://github.com/mhammond/pywin32/issues/1730
 import win32gui, win32ui, win32con
 
 
