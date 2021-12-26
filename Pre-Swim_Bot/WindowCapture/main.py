@@ -2,11 +2,17 @@ import cv2 as cv
 from time import time
 from WindowCapture import WindowCapture
 from vision import Vision
+from hsvfilter import HsvFilter
 
 # initialize the WindowCapture class
 wincap = WindowCapture()
 # initialize the Vision class
 vision_limestone = Vision('images/thumb.jpg')
+# initialize the trackbar window
+vision_limestone.init_control_gui()
+
+# example limestone HSV filter
+# hsv_filter = HsvFilter(0, 180, 129, 15, 229, 243, 143, 0, 67, 0)
 
 loop_time = time()
 while True:
@@ -14,9 +20,22 @@ while True:
     # get an updated image of the game
     screenshot = wincap.get_screenshot()
 
-    # display the processed image
-    points = vision_limestone.find(screenshot, 0.5, 'rectangles')
-    # points = vision_gunsnbottle.find(screenshot, 0.7, 'points')
+    # pre-process the image
+    processed_image = vision_limestone.apply_hsv_filter(screenshot)
+
+    # object detection
+    rectangles = vision_limestone.find(processed_image, 0.5)
+
+    # draw the detection results onto the original image
+    output_image = vision_limestone.draw_rectangles(screenshot, rectangles)
+
+    # resize the windows
+    output_image = cv.resize(output_image, (900, 500))
+    # processed_image = cv.resize(processed_image, (900, 500))
+
+    # Display the processed image and
+    cv.imshow('Matches', output_image)
+    # cv.imshow('Processed', processed_image)
 
     # debug the loop rate
     print('FPS {}'.format(1 / (time() - loop_time)))
