@@ -1,5 +1,9 @@
 import numpy as np
-import win32gui, win32ui, win32con
+# NOTE GO TO version 300
+# https://github.com/mhammond/pywin32/issues/1730
+import win32con
+import win32gui
+import win32ui
 
 
 class WindowCapture:

@@ -1,6 +1,4 @@
 import cv2 as cv
-import numpy as np
-import os
 from time import time
 from WindowCapture import WindowCapture
 from vision import Vision
