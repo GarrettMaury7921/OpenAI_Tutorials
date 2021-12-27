@@ -15,17 +15,18 @@ class Vision:
 
     # constructor
     def __init__(self, needle_img_path, method=cv.TM_CCOEFF_NORMED):
-        # load the image we're trying to match
-        # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html
+        if needle_img_path:
+            # load the image we're trying to match
+            # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html
 
-        # NOTE THIS LINE CAUSES if set to unchanged:
-        # cv2.error: OpenCV(4.5.4) D:\a\opencv-python\opencv-python
-        # \opencv\modules\imgproc\src\templmatch.cpp:1164: error: (-215:Assertion failed)...
-        self.needle_img = cv.imread(needle_img_path, cv.TM_CCOEFF_NORMED)
+            # NOTE THIS LINE CAUSES if set to unchanged:
+            # cv2.error: OpenCV(4.5.4) D:\a\opencv-python\opencv-python
+            # \opencv\modules\imgproc\src\templmatch.cpp:1164: error: (-215:Assertion failed)...
+            self.needle_img = cv.imread(needle_img_path, cv.TM_CCOEFF_NORMED)
 
-        # Save the dimensions of the needle image
-        self.needle_w = self.needle_img.shape[1]
-        self.needle_h = self.needle_img.shape[0]
+            # Save the dimensions of the needle image
+            self.needle_w = self.needle_img.shape[1]
+            self.needle_h = self.needle_img.shape[0]
 
         # There are 6 methods to choose from:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
