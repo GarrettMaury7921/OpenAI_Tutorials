@@ -26,10 +26,10 @@ while True:
     screenshot = wincap.get_screenshot()
 
     # do ML object detection
-    rectangles = cascade_limestone.detectMultiScale(screenshot)
+    # rectangles = cascade_limestone.detectMultiScale(screenshot)
 
     # draw the detection results onto the original image
-    detection_image = vision_limestone.draw_rectangles(screenshot, rectangles)
+    # detection_image = vision_limestone.draw_rectangles(screenshot, rectangles)
 
     # # pre-process the image
     # processed_image = vision_limestone.apply_hsv_filter(screenshot)
@@ -41,16 +41,16 @@ while True:
     # output_image = vision_limestone.draw_rectangles(screenshot, rectangles)
 
     # resize the windows
-    # output_image = cv.resize(screenshot, (900, 500))
+    output_image = cv.resize(screenshot, (900, 500))
     # processed_image = cv.resize(processed_image, (900, 500))
-    detection_image = cv.resize(detection_image, (900, 500))
+    # detection_image = cv.resize(detection_image, (900, 500))
 
     # Display the processed image and output image
-    # cv.imshow('Matches', output_image)
+    cv.imshow('Matches', output_image)
     # cv.imshow('Processed', processed_image)
 
     # Display detection image
-    cv.imshow('Matches', detection_image)
+    # cv.imshow('Matches', detection_image)
 
     # debug the loop rate
     print('FPS {}'.format(1 / (time() - loop_time)))
