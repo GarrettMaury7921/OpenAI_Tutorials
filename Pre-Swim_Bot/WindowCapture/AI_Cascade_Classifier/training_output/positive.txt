@@ -79,7 +79,6 @@ AI_Cascade_Classifier/data/positive/1640644359.5737076.jpg 4 980 0 124 34 1112 1
 AI_Cascade_Classifier/data/positive/1640644361.8890913.jpg 5 917 1 126 42 1043 0 127 33 1174 0 126 33 1301 0 127 25 1429 0 203 27
 AI_Cascade_Classifier/data/positive/1640644381.44175.jpg 4 979 1 130 39 1111 1 122 38 1234 1 127 26 1363 0 204 29
 AI_Cascade_Classifier/data/positive/1640644401.7698305.jpg 2 1110 1 126 39 1236 1 199 30
-AI_Cascade_Classifier/data/positive/1640644470.1993248.jpg 0
 AI_Cascade_Classifier/data/positive/1640644470.9449484.jpg 1 1173 0 198 44
 AI_Cascade_Classifier/data/positive/1640644471.8095174.jpg 1 1172 0 200 38
 AI_Cascade_Classifier/data/positive/1640644525.2078166.jpg 1 857 3 488 404
@@ -114,7 +113,6 @@ AI_Cascade_Classifier/data/positive/1640645226.1482944.jpg 2 1109 0 130 28 1238 
 AI_Cascade_Classifier/data/positive/1640645228.1470308.jpg 3 1046 1 129 38 1175 0 128 24 1303 0 196 28
 AI_Cascade_Classifier/data/positive/1640645232.7700279.jpg 2 1108 2 130 38 1233 2 202 23
 AI_Cascade_Classifier/data/positive/1640645238.881015.jpg 2 1109 0 128 41 1236 1 200 25
-AI_Cascade_Classifier/data/positive/1640645248.0932333.jpg 0
 AI_Cascade_Classifier/data/positive/1640645250.1517012.jpg 1 1168 0 205 39
 AI_Cascade_Classifier/data/positive/1640645252.302442.jpg 1 1173 1 200 36
 AI_Cascade_Classifier/data/positive/1640645253.1007602.jpg 1 1173 0 201 41
